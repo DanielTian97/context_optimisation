@@ -36,15 +36,20 @@ if __name__=="__main__":
         print(prompt)
         
         multi_call_results = {}
-        result_record.update({qid: multi_call_results})
+        result_record.update({str(qid): multi_call_results})
                   
         for j in range(5):
             print(f'\t\tno.{j}')
             result = llama_tools.single_call(llm=llm, prompt=prompt, temperature=0.3)
             multi_call_results.update({j: result})
-            
+    
+    
+    print(result_record)
+     
     f = open(result_file_name, "w+", encoding='UTF-8')
     json.dump(result_record, f, indent=4)
     f.close()
+    
+   
     
     del llm
