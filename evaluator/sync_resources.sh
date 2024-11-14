@@ -1,2 +1,2 @@
-rm -r ./answer
+rm -r ./answers
 ln -s ../generator/answers ./answers
