@@ -13,7 +13,7 @@ if __name__=="__main__":
     llm = llama_tools.load_llama()
 
     result_file_name = f'./answers/random_answers_3shot_5calls_{retriever_name}_{dataset_name}_integrated_{method_name}_{batch_size}.json'
-    context_file_name = f'./context/integrated_contexts_{method_name}_{retriever_name}_{dataset_name}.csv'
+    context_file_name = f'./context/integrated_contexts_{method_name}_{retriever_name}_{dataset_name}_{batch_size}.csv'
     query_file_name = f'./queries/queries_{dataset_name}.csv'
     
     f = open(file=context_file_name, mode="r", encoding='UTF-8')
