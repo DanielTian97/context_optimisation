@@ -4,7 +4,7 @@ import pickle
 import json
 import sys
 
-def prepare_qids_qrels_docdict(dataset_name):
+def prepare_qids_qrels_docdict():
 
     with open('./qrels/msmarco_passage_v1_qrels.pkl', 'rb') as f:
         doc_dict = pickle.load(f)
@@ -65,8 +65,8 @@ if __name__=="__main__":
     method = sys.argv[4]
         
     retriever_name = 'bm25'
-    file_path = f'./answers/random_answers_{batch_size}shot_{num_calls}calls_dl_{dataset_name}_{method}.json'
-    eval_file_path = f'./eval_results/eval_{batch_size}shot_{num_calls}calls_dl_{dataset_name}_{method}.json'
+    file_path = f'./answers/random_answers_{batch_size}shot_{num_calls}calls_{dataset_name}_{method}.json'
+    eval_file_path = f'./eval_results/eval_{batch_size}shot_{num_calls}calls_{dataset_name}_{method}.json'
 
     # experiment begins
     bertscore = load("bertscore")
