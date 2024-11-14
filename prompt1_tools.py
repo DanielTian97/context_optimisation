@@ -29,6 +29,17 @@ def prepare_data(dataset_name: str, retriever_name = 'bm25'):
       
     return doc_dict, queries, res
 
+# compose the examples in the context part into a single passage
+def compose_context_single(context_res, qid: str):
+    print(qid)
+    retrieved_for_q = context_res[context_res.qid==qid].sort_values(by=['rank']).head(1)
+    
+    composed_context = ''
+    text = retrieved_for_q.text.values[0]
+    composed_context += f'Context: "{text}";\n'
+            
+    return composed_context
+
 # compose the examples in the context part
 def compose_context_simplified(context_res, qid: str, batch_size):
     print(qid)
