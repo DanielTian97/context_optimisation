@@ -71,7 +71,7 @@ if __name__=="__main__":
     # experiment begins
     bertscore = load("bertscore")
     # prepare data
-    qrels, doc_dict = prepare_qids_qrels_docdict(dataset_name)
+    qrels, doc_dict = prepare_qids_qrels_docdict()
     
     # read the generated answers
     with open(file=file_path, mode="r") as f:
