@@ -1,2 +1,2 @@
-rm -r ./contexts
-ln -s ../retriever/contexts ./contexts
+rm -r ./context
+ln -s ../retriever/contexts ./context
