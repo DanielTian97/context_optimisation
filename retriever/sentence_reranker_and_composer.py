@@ -95,7 +95,7 @@ def simple_kv_composer(retriever, dataset, _k, _n, kv_dict):
     integrated_context_df = pd.DataFrame(raw_context_df_content, columns=['qid', 'docno', 'text', 'rank'])
     integrated_context_df.to_csv(f'./contexts/integrated_context/integrated_contexts_s-reranked_{retriever}_{dataset_name}_{_k}.csv', index=False)
 
-def position_based_kv_composer(retriever, dataset, _k, _n, kv_dict):
+def position_based_kv_composer(retriever, dataset, _k, _n, kv_dict, alpha):
     single_gram_sentence_res = pd.read_csv(f'./middle_products/sentence_res_{retriever}_{dataset_name}_{_n}.csv')
     single_gram_sentence_res.qid = single_gram_sentence_res.qid.astype('str')
     
@@ -103,7 +103,7 @@ def position_based_kv_composer(retriever, dataset, _k, _n, kv_dict):
     
     for qid in queries[dataset_name].qid.values:
         print(qid)
-        context_source = single_gram_sentence_res[single_gram_sentence_res.qid==qid].head(1*kv_dict[qid])
+        context_source = single_gram_sentence_res[single_gram_sentence_res.qid==qid].head(alpha*kv_dict[qid])
     
         collected = []
         reconstructed_df = pd.DataFrame([], columns=['qid', 'query', 'docno', 'text', 'score', 'rank'])
@@ -138,7 +138,10 @@ def position_based_kv_composer(retriever, dataset, _k, _n, kv_dict):
         raw_context_df_content.append([qid, f'i_r_c_p_{qid}', temp_context, 0])
         
     integrated_context_df = pd.DataFrame(raw_context_df_content, columns=['qid', 'docno', 'text', 'rank'])
-    integrated_context_df.to_csv(f'./contexts/integrated_context/integrated_contexts_s-reranked_position_{retriever}_{dataset_name}_{_k}.csv', index=False)
+    if(alpha==1):
+        integrated_context_df.to_csv(f'./contexts/integrated_context/integrated_contexts_s-reranked_position_{retriever}_{dataset_name}_{_k}.csv', index=False)
+    else:
+        integrated_context_df.to_csv(f'./contexts/integrated_context/integrated_contexts_s-reranked_position-{alpha}_{retriever}_{dataset_name}_{_k}.csv', index=False)
     
 if __name__=="__main__":
 
