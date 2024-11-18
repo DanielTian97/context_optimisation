@@ -102,7 +102,7 @@ def position_based_kv_composer(retriever, dataset, _k, _n, kv_dict, alpha):
     raw_context_df_content = []
     
     for qid in queries[dataset_name].qid.values:
-        print(qid)
+        print(qid, kv_dict[qid])
         context_source = single_gram_sentence_res[single_gram_sentence_res.qid==qid].head(alpha*kv_dict[qid])
     
         collected = []
@@ -111,6 +111,7 @@ def position_based_kv_composer(retriever, dataset, _k, _n, kv_dict, alpha):
         not_full = True
         temp_context = ''
         for i in range(context_source.shape[0]):
+            print(i)
             if(i in collected):
                 continue
                 
@@ -131,6 +132,7 @@ def position_based_kv_composer(retriever, dataset, _k, _n, kv_dict, alpha):
                 #     print('!!!!!!')
                 collected.append(j)
             if(not_full):
+                print(collected)
                 temp_context_list.append(temp_context_p)
                 if(len(collected) >= kv_dict[qid]):
                     not_full = False
