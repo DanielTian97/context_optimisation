@@ -37,7 +37,7 @@ def direct_composer(retriever, dataset_name, _k, doc_dict):
         kv_dict.update({qid: kv})
     
     integrated_context_df = pd.DataFrame(raw_context_df_content, columns=['qid', 'docno', 'text', 'rank'])
-    integrated_context_df.to_csv(f'./contexts/integrated_contexts_original_{retriever}_{dataset_name}_{_k}.csv', index=False)
+    integrated_context_df.to_csv(f'./contexts/integrated_context/integrated_contexts_original_{retriever}_{dataset_name}_{_k}.csv', index=False)
 
     return kv_dict
 
@@ -93,7 +93,7 @@ def simple_kv_composer(retriever, dataset, _k, _n, kv_dict):
         raw_context_df_content.append([qid, f'i_r_c_{qid}', temp_context, 0])
         
     integrated_context_df = pd.DataFrame(raw_context_df_content, columns=['qid', 'docno', 'text', 'rank'])
-    integrated_context_df.to_csv(f'./contexts/integrated_contexts_s-reranked_{retriever}_{dataset_name}_{_k}.csv', index=False)
+    integrated_context_df.to_csv(f'./contexts/integrated_context/integrated_contexts_s-reranked_{retriever}_{dataset_name}_{_k}.csv', index=False)
 
 def position_based_kv_composer(retriever, dataset, _k, _n, kv_dict):
     single_gram_sentence_res = pd.read_csv(f'./middle_products/sentence_res_{retriever}_{dataset_name}_{_n}.csv')
@@ -138,7 +138,7 @@ def position_based_kv_composer(retriever, dataset, _k, _n, kv_dict):
         raw_context_df_content.append([qid, f'i_r_c_p_{qid}', temp_context, 0])
         
     integrated_context_df = pd.DataFrame(raw_context_df_content, columns=['qid', 'docno', 'text', 'rank'])
-    integrated_context_df.to_csv(f'./contexts/integrated_contexts_s-reranked_position_{retriever}_{dataset_name}_{_k}.csv', index=False)
+    integrated_context_df.to_csv(f'./contexts/integrated_context/integrated_contexts_s-reranked_position_{retriever}_{dataset_name}_{_k}.csv', index=False)
     
 if __name__=="__main__":
 

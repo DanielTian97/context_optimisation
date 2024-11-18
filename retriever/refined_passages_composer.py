@@ -48,7 +48,7 @@ def unrefined_top_k_composer(retriever, dataset_name, _k):
             content.append([qid, f'o_{top_k_docno_for_q[i]}', reconstructed_top_k[i], i])
     
     original_context_df = pd.DataFrame(content, columns=['qid', 'docno', 'text', 'rank'])
-    original_context_df.to_csv(f'./contexts/original_contexts_{retriever}_{dataset_name}_{_k}.csv', index=False)
+    original_context_df.to_csv(f'./contexts/refined_context/original_contexts_{retriever}_{dataset_name}_{_k}.csv', index=False)
 
 def refined_top_k_composer(retriever, dataset_name, _k, refined_doc_dict):
     splitter = SentenceSplitter(language='en')
@@ -71,7 +71,7 @@ def refined_top_k_composer(retriever, dataset_name, _k, refined_doc_dict):
             content.append([qid, f'm_{top_k_docno_for_q[i]}', top_k_texts_for_q[i], i])
     
     modified_context_df = pd.DataFrame(content, columns=['qid', 'docno', 'text', 'rank'])
-    modified_context_df.to_csv(f'./contexts/modified_contexts_{retriever}_{dataset_name}_{_k}.csv', index=False)
+    modified_context_df.to_csv(f'./contexts/refined_context/modified_contexts_{retriever}_{dataset_name}_{_k}.csv', index=False)
 
 def reranked_refined_top_k_composer(retriever, dataset_name, _k, refined_doc_dict):
     splitter = SentenceSplitter(language='en')
@@ -94,11 +94,11 @@ def reranked_refined_top_k_composer(retriever, dataset_name, _k, refined_doc_dic
         reordered_refined_length_list.update({qid: num_s})
         reordered_refined_text_list.update({qid: top_k_texts_for_q})
     
-        for i in range(_k):
+        for i in range(min(len(top_k_docno_for_q), _k)):
             content.append([qid, f'rm_{top_k_docno_for_q[i]}', top_k_texts_for_q[i], i])
     
     reranked_modified_context_df = pd.DataFrame(content, columns=['qid', 'docno', 'text', 'rank'])
-    reranked_modified_context_df.to_csv(f'./contexts/reranked_modified_contexts_{retriever}_{dataset_name}_{_k}.csv', index=False)
+    reranked_modified_context_df.to_csv(f'./contexts/refined_context/reranked_modified_contexts_{retriever}_{dataset_name}_{_k}.csv', index=False)
     
 if __name__=="__main__":
     retriever = str(sys.argv[1])
