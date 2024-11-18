@@ -127,8 +127,8 @@ def position_based_kv_composer(retriever, dataset, _k, _n, kv_dict):
                 reconstructed_df = warningfree_concat(reconstructed_df, context_source.iloc[j])
                 temp_context_p += (context_source.text.values[j] + ' ')
                 temp_context += (context_source.text.values[j] + ' ')
-                if(i != j):
-                    print('!!!!!!')
+                # if(i != j):
+                #     print('!!!!!!')
                 collected.append(j)
             if(not_full):
                 temp_context_list.append(temp_context_p)
