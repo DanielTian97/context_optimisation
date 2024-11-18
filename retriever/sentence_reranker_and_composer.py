@@ -177,5 +177,6 @@ if __name__=="__main__":
     build_sentence_corpus_and_retrieve(retriever, dataset_name, _n, doc_dict)
 
     simple_kv_composer(retriever, dataset_name, _k, _n, kv_dict)
+    position_based_kv_composer(retriever, dataset_name, _k, _n, kv_dict, 1)
     position_based_kv_composer(retriever, dataset_name, _k, _n, kv_dict, _alpha)
     
