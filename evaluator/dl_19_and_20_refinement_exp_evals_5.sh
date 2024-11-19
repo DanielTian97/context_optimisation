@@ -1,0 +1,12 @@
+python evaluation_of_answers.py 5 5 dl_19 bm25 original
+python evaluation_of_answers.py 5 5 dl_20 bm25 original
+python evaluation_of_answers.py 5 5 dl_19 bm25 modified
+python evaluation_of_answers.py 5 5 dl_20 bm25 modified
+python evaluation_of_answers.py 5 5 dl_19 bm25 reranked_modified
+python evaluation_of_answers.py 5 5 dl_20 bm25 reranked_modified
+python evaluation_of_answers.py 5 5 dl_19 mt5 original
+python evaluation_of_answers.py 5 5 dl_20 mt5 original
+python evaluation_of_answers.py 5 5 dl_19 mt5 modified
+python evaluation_of_answers.py 5 5 dl_20 mt5 modified
+python evaluation_of_answers.py 5 5 dl_19 mt5 reranked_modified
+python evaluation_of_answers.py 5 5 dl_20 mt5 reranked_modified
