@@ -95,7 +95,7 @@ def simple_kv_composer(retriever, dataset, _k, _n, kv_dict):
     integrated_context_df = pd.DataFrame(raw_context_df_content, columns=['qid', 'docno', 'text', 'rank'])
     integrated_context_df.to_csv(f'./contexts/integrated_context/integrated_contexts_s-reranked_{retriever}_{dataset_name}_{_k}.csv', index=False)
 
-def position_based_kv_composer(retriever, dataset, _k, _n, kv_dict, alpha):
+def position_based_kv_composer(retriever, dataset, _k, _n, kv_dict, alpha=0):
     single_gram_sentence_res = pd.read_csv(f'./middle_products/sentence_res_{retriever}_{dataset_name}_{_n}.csv')
     single_gram_sentence_res.qid = single_gram_sentence_res.qid.astype('str')
     
@@ -103,7 +103,11 @@ def position_based_kv_composer(retriever, dataset, _k, _n, kv_dict, alpha):
     
     for qid in queries[dataset_name].qid.values:
         print(qid, kv_dict[qid])
-        context_source = single_gram_sentence_res[single_gram_sentence_res.qid==qid].head(alpha*kv_dict[qid])
+        
+        if(alpha == 0):
+            context_source = single_gram_sentence_res[single_gram_sentence_res.qid==qid]
+        else:
+            context_source = single_gram_sentence_res[single_gram_sentence_res.qid==qid].head(alpha*kv_dict[qid])
     
         collected = []
         reconstructed_df = pd.DataFrame([], columns=['qid', 'query', 'docno', 'text', 'score', 'rank'])
@@ -141,7 +145,7 @@ def position_based_kv_composer(retriever, dataset, _k, _n, kv_dict, alpha):
         raw_context_df_content.append([qid, f'i_r_c_p_{qid}', temp_context, 0])
         
     integrated_context_df = pd.DataFrame(raw_context_df_content, columns=['qid', 'docno', 'text', 'rank'])
-    if(alpha==1):
+    if(alpha==0):
         integrated_context_df.to_csv(f'./contexts/integrated_context/integrated_contexts_s-reranked_position_{retriever}_{dataset_name}_{_k}.csv', index=False)
     else:
         integrated_context_df.to_csv(f'./contexts/integrated_context/integrated_contexts_s-reranked_position-{alpha}_{retriever}_{dataset_name}_{_k}.csv', index=False)
@@ -151,7 +155,7 @@ if __name__=="__main__":
     retriever = str(sys.argv[1])
     dataset_name = str(sys.argv[2]) # dl_19
     _k = int(sys.argv[3])
-    _n = 50
+    _n = 20
     _alpha = 3
     
     if not pt.java.started():
@@ -177,6 +181,7 @@ if __name__=="__main__":
     build_sentence_corpus_and_retrieve(retriever, dataset_name, _n, doc_dict)
 
     simple_kv_composer(retriever, dataset_name, _k, _n, kv_dict)
+    position_based_kv_composer(retriever, dataset_name, _k, _n, kv_dict)
     position_based_kv_composer(retriever, dataset_name, _k, _n, kv_dict, 1)
     position_based_kv_composer(retriever, dataset_name, _k, _n, kv_dict, _alpha)
     

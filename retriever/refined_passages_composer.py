@@ -104,7 +104,7 @@ if __name__=="__main__":
     retriever = str(sys.argv[1])
     dataset_name = str(sys.argv[2]) # dl_19
     _k = int(sys.argv[3])
-    _n = 50
+    _n = 20
 
     if not pt.java.started():
         pt.java.init()
