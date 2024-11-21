@@ -11,7 +11,7 @@ from tqdm import tqdm
 def warningfree_concat(df1, df2):
     return (df1.copy() if df2.empty else df2.copy() if df1.empty else pd.concat([df1, df2]))
 
-def direct_composer(retriever, dataset_name, _k, doc_dict):
+def direct_composer(retriever, dataset_name, _k, doc_dict, queries, res):
     splitter = SentenceSplitter(language='en')
     
     kv_dict = {}
@@ -41,7 +41,7 @@ def direct_composer(retriever, dataset_name, _k, doc_dict):
 
     return kv_dict
 
-def build_sentence_corpus_and_retrieve(retriever, dataset_name, _n, doc_dict):
+def build_sentence_corpus_and_retrieve(retriever, dataset_name, _n, doc_dict, queries, res):
     splitter = SentenceSplitter(language='en')
     monoT5 = MonoT5ReRanker(verbose=False) # loads castorini/monot5-base-msmarco by default
     
@@ -66,7 +66,7 @@ def build_sentence_corpus_and_retrieve(retriever, dataset_name, _n, doc_dict):
     
     single_gram_sentence_output.to_csv(f'./middle_products/sentence_res_{retriever}_{dataset_name}_{_n}.csv', index=False)
 
-def simple_kv_composer(retriever, dataset, _k, _n, kv_dict):
+def simple_kv_composer(retriever, dataset_name, _k, _n, queries, kv_dict):
     single_gram_sentence_res = pd.read_csv(f'./middle_products/sentence_res_{retriever}_{dataset_name}_{_n}.csv')
     single_gram_sentence_res.qid = single_gram_sentence_res.qid.astype('str')
     
@@ -95,7 +95,7 @@ def simple_kv_composer(retriever, dataset, _k, _n, kv_dict):
     integrated_context_df = pd.DataFrame(raw_context_df_content, columns=['qid', 'docno', 'text', 'rank'])
     integrated_context_df.to_csv(f'./contexts/integrated_context/integrated_contexts_s-reranked_{retriever}_{dataset_name}_{_k}.csv', index=False)
 
-def position_based_kv_composer(retriever, dataset, _k, _n, kv_dict, alpha=0):
+def position_based_kv_composer(retriever, dataset_name, _k, _n, queries, kv_dict, alpha=0):
     single_gram_sentence_res = pd.read_csv(f'./middle_products/sentence_res_{retriever}_{dataset_name}_{_n}.csv')
     single_gram_sentence_res.qid = single_gram_sentence_res.qid.astype('str')
     
@@ -149,12 +149,9 @@ def position_based_kv_composer(retriever, dataset, _k, _n, kv_dict, alpha=0):
         integrated_context_df.to_csv(f'./contexts/integrated_context/integrated_contexts_s-reranked_position_{retriever}_{dataset_name}_{_k}.csv', index=False)
     else:
         integrated_context_df.to_csv(f'./contexts/integrated_context/integrated_contexts_s-reranked_position-{alpha}_{retriever}_{dataset_name}_{_k}.csv', index=False)
-    
-if __name__=="__main__":
 
-    retriever = str(sys.argv[1])
-    dataset_name = str(sys.argv[2]) # dl_19
-    _k = int(sys.argv[3])
+def main(retriever, dataset_name, _k):
+    
     _n = 20
     _alpha = 3
     
@@ -177,11 +174,21 @@ if __name__=="__main__":
     res.qid = res.qid.astype('str')
     res.docno = res.docno.astype('str')
 
-    kv_dict = direct_composer(retriever, dataset_name, _k, doc_dict)
-    build_sentence_corpus_and_retrieve(retriever, dataset_name, _n, doc_dict)
+    kv_dict = direct_composer(retriever, dataset_name, _k, doc_dict, queries, res)
+    build_sentence_corpus_and_retrieve(retriever, dataset_name, _n, doc_dict, queries, res)
 
-    simple_kv_composer(retriever, dataset_name, _k, _n, kv_dict)
-    position_based_kv_composer(retriever, dataset_name, _k, _n, kv_dict)
-    position_based_kv_composer(retriever, dataset_name, _k, _n, kv_dict, 1)
-    position_based_kv_composer(retriever, dataset_name, _k, _n, kv_dict, _alpha)
+    simple_kv_composer(retriever, dataset_name, _k, _n, queries, kv_dict)
+    position_based_kv_composer(retriever, dataset_name, _k, _n, queries, kv_dict)
+    position_based_kv_composer(retriever, dataset_name, _k, _n, queries, kv_dict, 1)
+    position_based_kv_composer(retriever, dataset_name, _k, _n, queries, kv_dict, _alpha)
+
+if __name__=="__main__":
+
+    retriever = str(sys.argv[1])
+    dataset_name = str(sys.argv[2]) # dl_19
+    _k = int(sys.argv[3])
+    
+    main(retriever, dataset_name, _k)
+    
+
     
