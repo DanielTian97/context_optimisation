@@ -150,7 +150,12 @@ def position_based_kv_composer(retriever, dataset_name, _k, _n, queries, kv_dict
     else:
         integrated_context_df.to_csv(f'./contexts/integrated_context/integrated_contexts_s-reranked_position-{alpha}_{retriever}_{dataset_name}_{_k}.csv', index=False)
 
-def main(retriever, dataset_name, _k):
+
+if __name__=="__main__":
+
+    retriever = str(sys.argv[1])
+    dataset_name = str(sys.argv[2]) # dl_19
+    _k = int(sys.argv[3])
     
     _n = 20
     _alpha = 3
@@ -181,14 +186,6 @@ def main(retriever, dataset_name, _k):
     position_based_kv_composer(retriever, dataset_name, _k, _n, queries, kv_dict)
     position_based_kv_composer(retriever, dataset_name, _k, _n, queries, kv_dict, 1)
     position_based_kv_composer(retriever, dataset_name, _k, _n, queries, kv_dict, _alpha)
-
-if __name__=="__main__":
-
-    retriever = str(sys.argv[1])
-    dataset_name = str(sys.argv[2]) # dl_19
-    _k = int(sys.argv[3])
-    
-    main(retriever, dataset_name, _k)
     
 
     
