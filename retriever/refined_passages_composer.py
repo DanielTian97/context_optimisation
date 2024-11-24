@@ -73,7 +73,7 @@ def refined_top_k_composer(retriever, dataset_name, _k, refined_doc_dict):
     modified_context_df = pd.DataFrame(content, columns=['qid', 'docno', 'text', 'rank'])
     modified_context_df.to_csv(f'./contexts/refined_context/modified_contexts_{retriever}_{dataset_name}_{_k}.csv', index=False)
 
-def reranked_refined_top_k_composer(retriever, dataset_name, _k, refined_doc_dict):
+def reranked_refined_top_k_composer(retriever, dataset_name, _k, _n, refined_doc_dict):
     splitter = SentenceSplitter(language='en')
     
     reordered_refined_length_list = {}
@@ -86,7 +86,7 @@ def reranked_refined_top_k_composer(retriever, dataset_name, _k, refined_doc_dic
         for item in top_k_texts_for_q.items():
             temp_df_content.append([item[0], item[1]['text'], item[1]['rel']])
     
-        temp_df = pd.DataFrame(temp_df_content, columns=['pid', 'text', 'score']).sort_values(by=['score'], ascending=False)
+        temp_df = pd.DataFrame(temp_df_content, columns=['pid', 'text', 'score']).sort_values(by=['score'], ascending=False).head(_n)
 
         top_k_docno_for_q = temp_df.head(_k).pid.values.tolist()
         top_k_texts_for_q = temp_df.head(_k).text.values.tolist()
@@ -121,10 +121,10 @@ if __name__=="__main__":
         doc_dict = pickle.load(f)
         f.close()
 
-    with open(f'./refined_passages/refined_dict_{retriever}_{dataset_name}_top-{_n}.json', 'r') as f:
+    with open(f'./refined_passages/refined_dict_{retriever}_{dataset_name}_top-50.json', 'r') as f:
         refined_doc_dict = json.load(f)
         f.close()
 
     unrefined_top_k_composer(retriever, dataset_name, _k)
     refined_top_k_composer(retriever, dataset_name, _k, refined_doc_dict)
-    reranked_refined_top_k_composer(retriever, dataset_name, _k, refined_doc_dict)
+    reranked_refined_top_k_composer(retriever, dataset_name, _k, _n, refined_doc_dict)
